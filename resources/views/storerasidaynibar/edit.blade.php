@@ -1,0 +1,27 @@
+@extends('layouts.app')
+
+@section('content')
+    <h1>Edit Rasid Ayni Bar</h1>
+
+    <form action="{{ route('storerasidaynibar.update', $rasid->id) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" name="description" required maxlength="255"
+                value="{{ old('description', $rasid->description) }}">
+        </div>
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" step="0.01" class="form-control" id="amount" name="amount" required
+                value="{{ old('amount', $rasid->amount) }}">
+        </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date" name="date" required
+                value="{{ old('date', $rasid->date) }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Rasid Ayni Bar</button>
+        <a href="{{ route('storerasidaynibar.index') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+@endsection
