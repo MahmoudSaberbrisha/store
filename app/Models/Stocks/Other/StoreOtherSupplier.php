@@ -14,6 +14,27 @@ class StoreOtherSupplier extends Model
     protected $table = 'store_other_suppliers';
 
     /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'code';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'int';
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool

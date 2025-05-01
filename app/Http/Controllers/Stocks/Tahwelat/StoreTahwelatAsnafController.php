@@ -27,16 +27,20 @@ class StoreTahwelatAsnafController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreTahwelatAsnaf model fields
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'rkm_fk' => 'required|integer',
+            'sanf_id' => 'required|integer',
+            'sanf_n' => 'required|string|max:255',
+            'sanf_code' => 'required|integer',
+            'amount_motah' => 'required|integer',
+            'amount_send' => 'required|integer',
+            'from_storage' => 'required|integer',
+            'to_storage' => 'required|integer',
         ]);
 
         $asnaf = StoreTahwelatAsnaf::create($validated);
         if ($asnaf) {
-            return redirect()->route('storetahwelatasnaf.index')->with('success', 'Tahwelat asnaf created successfully.');
             $asnaf->save();
+            return redirect()->route('storetahwelatasnaf.index')->with('success', 'Tahwelat asnaf created successfully.');
         } else {
             return redirect()->back()->with('error', 'Failed to create tahwelat asnaf.');
         }
@@ -59,16 +63,20 @@ class StoreTahwelatAsnafController extends Controller
         $asnaf = StoreTahwelatAsnaf::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreTahwelatAsnaf model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'rkm_fk' => 'sometimes|required|integer',
+            'sanf_id' => 'sometimes|required|integer',
+            'sanf_n' => 'sometimes|required|string|max:255',
+            'sanf_code' => 'sometimes|required|integer',
+            'amount_motah' => 'sometimes|required|integer',
+            'amount_send' => 'sometimes|required|integer',
+            'from_storage' => 'sometimes|required|integer',
+            'to_storage' => 'sometimes|required|integer',
         ]);
 
         $asnaf->update($validated);
         if ($asnaf) {
-            return redirect()->route('storetahwelatasnaf.index')->with('success', 'Tahwelat asnaf updated successfully.');
             $asnaf->save();
+            return redirect()->route('storetahwelatasnaf.index')->with('success', 'Tahwelat asnaf updated successfully.');
         } else {
             return redirect()->back()->with('error', 'Failed to update tahwelat asnaf.');
         }

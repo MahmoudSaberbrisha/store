@@ -6,24 +6,23 @@
         <a href="{{ route('storekhazina.create') }}" class="btn btn-primary">Add New Khazina Record</a>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Khazina Name</th>
-                <th>Description</th>
-                <th>Balance</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($khazinas as $khazina)
-                <tr>
-                    <td>{{ $khazina->id }}</td>
-                    <td><a href="{{ route('storekhazina.show', $khazina->id) }}">{{ $khazina->name }}</a></td>
-                    <td>{{ $khazina->description }}</td>
-                    <td>{{ $khazina->balance }}</td>
-                    <td>
+    <div class="row">
+        @foreach ($khazinas as $khazina)
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card h-100 shadow-sm p-2">
+                    <div class="card-header bg-primary text-white py-1 px-2">
+                        <a href="{{ route('storekhazina.show', $khazina->id) }}" class="text-white text-decoration-none">
+                            {{ $khazina->name }}
+                        </a>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row g-2">
+                            <div class="col-6"><strong>ID:</strong> {{ $khazina->id }}</div>
+                            <div class="col-6"><strong>Description:</strong> {{ $khazina->description }}</div>
+                            <div class="col-6"><strong>Balance:</strong> {{ $khazina->balance }}</div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between py-1 px-2">
                         <a href="{{ route('storekhazina.edit', $khazina->id) }}" class="btn btn-sm btn-warning">Edit</a>
                         <form action="{{ route('storekhazina.destroy', $khazina->id) }}" method="POST" class="d-inline"
                             onsubmit="return confirm('Are you sure?');">
@@ -31,9 +30,9 @@
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger" type="submit">Delete</button>
                         </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 @endsection

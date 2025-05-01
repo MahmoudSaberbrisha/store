@@ -42,18 +42,18 @@ class CreateStorePurchasesOtherFatoraTable extends Migration
             $table->string('sheek_num', 20);
             $table->string('sheek_status', 20)->default('0');
             $table->decimal('sheek_value', 19, 0)->default(0);
-            $table->integer('recived_date');
-            $table->integer('accept_date')->default(0);
+            $table->date('recived_date');
+            $table->date('accept_date')->default(0);
             $table->string('byan', 15);
             $table->integer('marge3_num');
-            $table->integer('date_s');
-            $table->string('date_ar', 20);
+            $table->date('date_s');
+            $table->date('date_ar');
             $table->unsignedBigInteger('publisher')->nullable();
             $table->tinyInteger('deport')->default(0);
             $table->integer('had_back')->default(0);
             $table->string('had_back_reason', 20);
-            $table->string('had_back_date', 20);
-            $table->string('had_back_date_s', 20);
+            $table->date('had_back_date');
+            $table->date('had_back_date_s');
             $table->string('had_back_value', 20)->default('0');
             $table->tinyInteger('type')->default(0);
 

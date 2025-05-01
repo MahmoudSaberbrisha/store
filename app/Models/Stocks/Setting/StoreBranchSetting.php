@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Models\Stocks\Setting;
+namespace App\Models\Stocks\Setting;
 
 use Illuminate\Database\Eloquent\Model;
 

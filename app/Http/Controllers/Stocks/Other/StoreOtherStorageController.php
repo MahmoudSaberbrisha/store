@@ -20,7 +20,8 @@ class StoreOtherStorageController extends StocksBaseController
     }
     public function create()
     {
-        return view('storeotherstorage.create');
+        $branches = \App\Models\Stocks\Setting\StoreBranchSetting::all();
+        return view('storeotherstorage.create', compact('branches'));
     }
 
     /**

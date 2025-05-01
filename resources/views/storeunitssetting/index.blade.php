@@ -2,38 +2,35 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Store Units Setting</h1>
+        <h1>Units Settings</h1>
         <a href="{{ route('storeunitssetting.create') }}" class="btn btn-primary">Add New Units Setting</a>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Unit Name</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($unitssettings as $unitssetting)
-                <tr>
-                    <td>{{ $unitssetting->id }}</td>
-                    <td><a href="{{ route('storeunitssetting.show', $unitssetting->id) }}">{{ $unitssetting->unit_name }}</a>
-                    </td>
-                    <td>{{ $unitssetting->description }}</td>
-                    <td>
-                        <a href="{{ route('storeunitssetting.edit', $unitssetting->id) }}"
-                            class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('storeunitssetting.destroy', $unitssetting->id) }}" method="POST"
-                            class="d-inline" onsubmit="return confirm('Are you sure?');">
+    <div class="row">
+        @foreach ($units as $unit)
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card h-100 shadow-sm p-2">
+                    <div class="card-header bg-primary text-white py-1 px-2">
+                        <strong>{{ $unit->unit_name }}</strong>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row g-2">
+                            <div class="col-6"><strong>ID:</strong> {{ $unit->id }}</div>
+                            <div class="col-12"><strong>Description:</strong> {{ $unit->description }}</div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between py-1 px-2">
+                        <a href="{{ route('storeunitssetting.show', $unit->id) }}" class="btn btn-sm btn-info">View</a>
+                        <a href="{{ route('storeunitssetting.edit', $unit->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{{ route('storeunitssetting.destroy', $unit->id) }}" method="POST" class="d-inline"
+                            onsubmit="return confirm('Are you sure?');">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger" type="submit">Delete</button>
                         </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 @endsection

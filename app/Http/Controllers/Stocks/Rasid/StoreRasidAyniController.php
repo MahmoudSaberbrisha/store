@@ -28,11 +28,16 @@ class StoreRasidAyniController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreRasidAyni model fields
-            // Placeholder example:
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch_id_fk' => 'required|integer',
+            'sub_branch_id_fk' => 'required|integer',
+            'date' => 'required|date',
+            'date_ar' => 'nullable|string',
+            'publisher_name' => 'nullable|string|max:255',
+            'publisher' => 'nullable|integer',
+            'sanf_code' => 'nullable|string|max:255',
+            'sanf_id' => 'nullable|integer',
+            'sanf_name' => 'nullable|string|max:255',
+            'sanf_amount' => 'nullable|numeric',
         ]);
 
         $record = StoreRasidAyni::create($validated);
@@ -62,10 +67,16 @@ class StoreRasidAyniController extends Controller
         $record = StoreRasidAyni::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreRasidAyni model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch_id_fk' => 'sometimes|required|integer',
+            'sub_branch_id_fk' => 'sometimes|required|integer',
+            'date' => 'sometimes|required|date',
+            'date_ar' => 'nullable|string',
+            'publisher_name' => 'nullable|string|max:255',
+            'publisher' => 'nullable|integer',
+            'sanf_code' => 'nullable|string|max:255',
+            'sanf_id' => 'nullable|integer',
+            'sanf_name' => 'nullable|string|max:255',
+            'sanf_amount' => 'nullable|numeric',
         ]);
 
         $record->update($validated);

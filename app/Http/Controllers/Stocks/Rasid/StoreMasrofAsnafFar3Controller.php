@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Stocks\Rasid;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Stocks\Rasid\StoreMasrofAsnafFar3;
+use App\Models\Stocks\Setting\StoreBranchSetting;
+use App\Models\Stocks\Items\StoreItem;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class StoreMasrofAsnafFar3Controller extends Controller
 {
@@ -20,9 +24,46 @@ class StoreMasrofAsnafFar3Controller extends Controller
     /**
      * Show the form for creating a new masrof asnaf far3 record.
      */
+
+
+
     public function create()
     {
-        return view('storemasrofasnaffar3.create');
+        // Fetch main branches (where from_id is null or 0 or '0')
+        $mainBranches = StoreBranchSetting::whereNotNull('from_id')
+            ->orWhere('from_id', 0)
+            ->orWhere('from_id', '0')
+            ->get();
+
+        // Fetch all sub branches
+        $subBranches = StoreBranchSetting::whereNotNull('from_id')
+            ->get();
+
+        // Fetch all items
+        $items = StoreItem::all();
+
+        // Fetch all publishers (users)
+        $publishers = User::all();
+
+        // Generate next unique sarf_rkm
+        $maxSarfRkm = DB::table('store_masrof_asnaf_far3')->max('sarf_rkm');
+        $nextSarfRkm = $maxSarfRkm ? $maxSarfRkm + 1 : 1;
+
+        return view('storemasrofasnaffar3.create', compact('mainBranches', 'subBranches', 'items', 'publishers', 'nextSarfRkm'));
+    }
+
+    /**
+     * API to get available quantity for a given item code
+     */
+    public function getAvailableQuantity($sanf_code)
+    {
+        $item = StoreItem::where('sanf_code', $sanf_code)->first();
+
+        if ($item) {
+            return response()->json(['available_amount' => $item->all_amount]);
+        } else {
+            return response()->json(['available_amount' => 0]);
+        }
     }
 
 
@@ -32,11 +73,18 @@ class StoreMasrofAsnafFar3Controller extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreMasrofAsnafFar3 model fields
-            // Placeholder example:
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch_fk' => 'required|integer',
+            'sub_branch_fk' => 'required|integer',
+            'sarf_rkm' => 'required|integer',
+            'sarf_to' => 'required|integer',
+            'sanf_code' => 'required|string',
+            'available_amount' => 'required|integer',
+            'sanf_amount' => 'required|integer',
+            'one_price_sell' => 'required|integer',
+            'date' => 'required|date',
+            'date_ar' => 'nullable|string',
+            'publisher' => 'required|integer',
+            'publisher_name' => 'nullable|string',
         ]);
 
         $record = StoreMasrofAsnafFar3::create($validated);
@@ -66,10 +114,18 @@ class StoreMasrofAsnafFar3Controller extends Controller
         $record = StoreMasrofAsnafFar3::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreMasrofAsnafFar3 model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch_fk' => 'sometimes|required|integer',
+            'sub_branch_fk' => 'sometimes|required|integer',
+            'sarf_rkm' => 'sometimes|required|integer',
+            'sarf_to' => 'sometimes|required|integer',
+            'sanf_code' => 'sometimes|required|string',
+            'available_amount' => 'sometimes|required|integer',
+            'sanf_amount' => 'sometimes|required|integer',
+            'one_price_sell' => 'sometimes|required|integer',
+            'date' => 'sometimes|required|date',
+            'date_ar' => 'sometimes|nullable|string',
+            'publisher' => 'sometimes|required|integer',
+            'publisher_name' => 'sometimes|nullable|string',
         ]);
 
         $record->update($validated);

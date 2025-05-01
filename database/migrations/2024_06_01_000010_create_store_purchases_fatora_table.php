@@ -30,13 +30,13 @@ class CreateStorePurchasesFatoraTable extends Migration
             $table->string('fatora_cost_after_discount', 300);
             $table->integer('paid_type');
             $table->integer('box_name');
-            $table->string('paid', 300);
+            $table->integer('paid', 300);
             $table->string('remain', 300);
             $table->string('byan', 255);
-            $table->integer('date');
-            $table->integer('date_s');
+            $table->date('date');
+            $table->date('date_s');
             $table->string('publisher', 300);
-            $table->integer('had_back')->default(0);
+            $table->string('had_back')->default(0);
             $table->string('sarf_far3_pill_num', 255)->nullable();
 
             // Foreign key constraints

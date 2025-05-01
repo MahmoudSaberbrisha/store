@@ -3,18 +3,28 @@
 @section('content')
     <h1>Edit Branch Setting</h1>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('storebranchsetting.update', $branchsetting->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="mb-3">
-            <label for="title" class="form-label">Branch Name</label>
+            <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" id="title" name="title" required maxlength="15"
                 value="{{ old('title', $branchsetting->title) }}">
         </div>
         <div class="mb-3">
             <label for="br_code" class="form-label">Branch Code</label>
             <select class="form-select" id="br_code" name="br_code">
-                <option value="" {{ old('br_code', $branchsetting->br_code) == '' ? 'selected' : '' }}>None</option>
+                <option value="">Select Branch Code</option>
                 <option value="A" {{ old('br_code', $branchsetting->br_code) == 'A' ? 'selected' : '' }}>A</option>
                 <option value="B" {{ old('br_code', $branchsetting->br_code) == 'B' ? 'selected' : '' }}>B</option>
                 <option value="C" {{ old('br_code', $branchsetting->br_code) == 'C' ? 'selected' : '' }}>C</option>
@@ -23,11 +33,10 @@
         <div class="mb-3">
             <label for="from_id" class="form-label">Parent Branch</label>
             <select class="form-select" id="from_id" name="from_id">
-                <option value="" {{ old('from_id', $branchsetting->from_id) == '' ? 'selected' : '' }}>None</option>
+                <option value="">Select Parent Branch</option>
                 @foreach ($branches as $branch)
                     <option value="{{ $branch->id }}"
-                        {{ old('from_id', $branchsetting->from_id) == $branch->id ? 'selected' : '' }}>
-                        {{ $branch->title }}
+                        {{ old('from_id', $branchsetting->from_id) == $branch->id ? 'selected' : '' }}>{{ $branch->title }}
                     </option>
                 @endforeach
             </select>

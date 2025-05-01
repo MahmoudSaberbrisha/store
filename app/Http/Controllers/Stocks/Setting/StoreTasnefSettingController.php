@@ -27,10 +27,8 @@ class StoreTasnefSettingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreTasnefSetting model fields
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'name' => 'required|string|max:255',
+            'type' => 'nullable|string|max:255',
         ]);
 
         $tasnef = StoreTasnefSetting::create($validated);
@@ -60,10 +58,8 @@ class StoreTasnefSettingController extends Controller
         $tasnef = StoreTasnefSetting::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreTasnefSetting model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'name' => 'sometimes|required|string|max:255',
+            'type' => 'sometimes|nullable|string|max:255',
         ]);
 
         $tasnef->update($validated);

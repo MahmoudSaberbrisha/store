@@ -26,6 +26,17 @@ class StoreRasidAyniBar extends Model
 
     public $timestamps = false;
 
+    // Validation rules for create and update
+    public static function validationRules($update = false, $id = null)
+    {
+        $rules = [
+            'field1' => $update ? 'sometimes|required|string' : 'required|string',
+            'field2' => 'nullable|integer',
+        ];
+
+        return $rules;
+    }
+
     public function mainBranch()
     {
         return $this->belongsTo(StoreBranchSetting::class, 'main_branch_id_fk');
@@ -44,5 +55,12 @@ class StoreRasidAyniBar extends Model
     public function item()
     {
         return $this->belongsTo(StoreItem::class, 'sanf_code', 'sanf_code');
+    }
+
+    // Example business logic method: calculate total amount or other relevant calculations
+    public function calculateTotalAmount()
+    {
+        // Placeholder for actual calculation logic
+        return $this->sanf_amount; // Example: just returning the amount for now
     }
 }

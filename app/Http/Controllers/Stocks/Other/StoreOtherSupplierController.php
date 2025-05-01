@@ -21,7 +21,51 @@ class StoreOtherSupplierController extends StocksBaseController
 
     public function create()
     {
-        return view('storeothersupplier.create');
+        $maxCode = StoreOtherSupplier::where('code', 'like', '1%')
+            ->max('code');
+
+        if ($maxCode) {
+            $number = (int) substr($maxCode, 3);
+            $nextNumber = $number + 1;
+        } else {
+            $nextNumber = 1;
+        }
+
+        $nextCode = '1' . str_pad($nextNumber, 3, '1', STR_PAD_LEFT);
+
+        return view('storeothersupplier.create', compact('nextCode'));
+    }
+
+    /**
+     * Get the next available code based on the given code.
+     */
+    public function getNextCode(Request $request)
+    {
+        $code = $request->query('code');
+
+        if (!$code) {
+            return response()->json(['error' => 'Code parameter is required'], 400);
+        }
+
+        // If code does not start with '0', return error or handle accordingly
+        if (substr($code, 0, 1) !== '0') {
+            return response()->json(['error' => 'Code must start with 0'], 400);
+        }
+
+        // Extract numeric part from code
+        $numberPart = (int) substr($code, 1);
+
+        // Loop to find next available code
+        do {
+            $currentCode = '1' . str_pad($numberPart, 3, '1', STR_PAD_LEFT);
+            $exists = StoreOtherSupplier::where('code', $currentCode)->exists();
+            if (!$exists) {
+                break;
+            }
+            $numberPart++;
+        } while (true);
+
+        return response()->json(['nextCode' => $currentCode]);
     }
 
     /**
@@ -30,11 +74,14 @@ class StoreOtherSupplierController extends StocksBaseController
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreOtherSupplier model fields
-            // Placeholder example:
-            'name' => 'required|string|max:100',
-            'contact' => 'nullable|string|max:100',
-            // Add other fields as per model
+            'code' => 'required|string|unique:store_other_suppliers,code',
+            'name' => 'required|string|max:255',
+            'supplier_address' => 'nullable|string|max:255',
+            'supplier_phone' => 'nullable|string|max:50',
+            'supplier_fax' => 'nullable|string|max:50',
+            'accountant_name' => 'nullable|string|max:255',
+            'accountant_telephone' => 'nullable|string|max:50',
+            'supplier_dayen' => 'nullable|numeric',
         ]);
 
         $supplier = StoreOtherSupplier::create($validated);
@@ -61,10 +108,14 @@ class StoreOtherSupplierController extends StocksBaseController
         $supplier = StoreOtherSupplier::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreOtherSupplier model fields
-            'name' => 'sometimes|required|string|max:100',
-            'contact' => 'nullable|string|max:100',
-            // Add other fields as per model
+            'code' => 'sometimes|required|string|unique:store_other_suppliers,code,' . $request->route('id'),
+            'name' => 'sometimes|required|string|max:255',
+            'supplier_address' => 'sometimes|nullable|string|max:255',
+            'supplier_phone' => 'sometimes|nullable|string|max:50',
+            'supplier_fax' => 'sometimes|nullable|string|max:50',
+            'accountant_name' => 'sometimes|nullable|string|max:255',
+            'accountant_telephone' => 'sometimes|nullable|string|max:50',
+            'supplier_dayen' => 'sometimes|nullable|numeric',
         ]);
 
         $supplier->update($validated);

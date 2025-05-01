@@ -2,39 +2,45 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Store Other Suppliers</h1>
-        <a href="{{ route('storeothersupplier.create') }}" class="btn btn-primary">Add New Supplier</a>
+        <h1>تخزين الموردين الآخرين</h1>
+        <a href="{{ route('storeothersupplier.create') }}" class="btn btn-primary">إضافة مورد جديد</a>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Supplier Name</th>
-                <th>Contact</th>
-                <th>Address</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($suppliers as $supplier)
-                <tr>
-                    <td>{{ $supplier->id }}</td>
-                    <td><a href="{{ route('storeothersupplier.show', $supplier->id) }}">{{ $supplier->name }}</a></td>
-                    <td>{{ $supplier->contact }}</td>
-                    <td>{{ $supplier->address }}</td>
-                    <td>
+    <div class="row">
+        @foreach ($suppliers as $supplier)
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card h-100 shadow-sm p-2">
+                    <div class="card-header bg-primary text-white py-1 px-2">
+                        <a href="{{ route('storeothersupplier.show', $supplier->id) }}"
+                            class="text-white text-decoration-none">
+                            {{ $supplier->name }}
+                        </a>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row g-2">
+                            <div class="col-6"><strong>ID:</strong> {{ $supplier->id }}</div>
+                            <div class="col-6"><strong>Code:</strong> {{ $supplier->code }}</div>
+                            <div class="col-6"><strong>Supplier Address:</strong> {{ $supplier->supplier_address }}</div>
+                            <div class="col-6"><strong>Supplier Phone:</strong> {{ $supplier->supplier_phone }}</div>
+                            <div class="col-6"><strong>Supplier Fax:</strong> {{ $supplier->supplier_fax }}</div>
+                            <div class="col-6"><strong>Accountant Name:</strong> {{ $supplier->accountant_name }}</div>
+                            <div class="col-6"><strong>Accountant Telephone:</strong> {{ $supplier->accountant_telephone }}
+                            </div>
+                            <div class="col-6"><strong>Supplier Dayen:</strong> {{ $supplier->supplier_dayen }}</div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between py-1 px-2">
                         <a href="{{ route('storeothersupplier.edit', $supplier->id) }}"
-                            class="btn btn-sm btn-warning">Edit</a>
+                            class="btn btn-sm btn-warning">تعديل</a>
                         <form action="{{ route('storeothersupplier.destroy', $supplier->id) }}" method="POST"
-                            class="d-inline" onsubmit="return confirm('Are you sure?');">
+                            class="d-inline" onsubmit="return confirm('هل أنت متأكد؟');">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                            <button class="btn btn-sm btn-danger" type="submit">حذف</button>
                         </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 @endsection

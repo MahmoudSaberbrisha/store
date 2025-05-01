@@ -21,7 +21,8 @@ class StoreKhazinaController extends StocksBaseController
 
     public function create()
     {
-        return view(' storekhazina.create');
+        $branches = \App\Models\Stocks\Setting\StoreBranchSetting::all();
+        return view('storekhazina.create', compact('branches'));
     }
 
     /**
@@ -30,11 +31,9 @@ class StoreKhazinaController extends StocksBaseController
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreKhazina model fields
-            // Placeholder example:
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch_id_fk' => 'required|integer',
+            'sub_branch_id_fk' => 'required|integer',
+            'name' => 'required|string|max:255',
         ]);
 
         $khazina = StoreKhazina::create($validated);
@@ -60,10 +59,9 @@ class StoreKhazinaController extends StocksBaseController
         $khazina = StoreKhazina::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreKhazina model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch_id_fk' => 'sometimes|required|integer',
+            'sub_branch_id_fk' => 'sometimes|required|integer',
+            'name' => 'sometimes|required|string|max:255',
         ]);
 
         $khazina->update($validated);

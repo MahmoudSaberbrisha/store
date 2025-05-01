@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Stocks\Items;
 use App\Http\Controllers\Stocks\StocksBaseController;
 use Illuminate\Http\Request;
 use App\Models\Stocks\Items\StoreAllItemsPrices;
+use App\Models\Stocks\Items\StoreItem;
 use Illuminate\Support\Facades\Log;
 
 class StoreAllItemsPricesController extends StocksBaseController
@@ -23,7 +24,8 @@ class StoreAllItemsPricesController extends StocksBaseController
     public function create()
     {
         $users = \App\Models\User::select('id', 'name')->get();
-        return view('storeallitemsprices.create', compact('users'));
+        $storeItems = StoreItem::select('id', 'sanf_code', 'name')->get();
+        return view('storeallitemsprices.create', compact('users', 'storeItems'));
     }
 
     /**

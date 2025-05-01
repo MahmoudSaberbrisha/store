@@ -3,6 +3,16 @@
 @section('content')
     <h1>Add New Units Setting</h1>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('storeunitssetting.store') }}" method="POST">
         @csrf
         <div class="mb-3">
@@ -12,7 +22,7 @@
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
+            <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
         </div>
         <button type="submit" class="btn btn-primary">Add Units Setting</button>
         <a href="{{ route('storeunitssetting.index') }}" class="btn btn-secondary">Cancel</a>

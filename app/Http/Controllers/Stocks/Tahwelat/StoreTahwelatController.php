@@ -27,10 +27,17 @@ class StoreTahwelatController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreTahwelat model fields
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'rkm' => 'required|integer',
+            'order_date' => 'required|date',
+            'order_date_ar' => 'nullable|string|max:255',
+            'order_time' => 'nullable|string|max:50',
+            'from_storage' => 'required|integer|exists:store_other_storage,id',
+            'to_storage' => 'required|integer|exists:store_other_storage,id',
+            'reason' => 'nullable|string|max:255',
+            'publisher' => 'required|integer',
+            'publisher_name' => 'nullable|string|max:255',
+            'from_storage_n' => 'nullable|string|max:255',
+            'to_storage_n' => 'nullable|string|max:255',
         ]);
 
         $tahwelat = StoreTahwelat::create($validated);
@@ -46,10 +53,17 @@ class StoreTahwelatController extends Controller
         $tahwelat = StoreTahwelat::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreTahwelat model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'rkm' => 'sometimes|required|integer',
+            'order_date' => 'sometimes|required|date',
+            'order_date_ar' => 'sometimes|nullable|string|max:255',
+            'order_time' => 'sometimes|nullable|string|max:50',
+            'from_storage' => 'sometimes|required|integer|exists:store_other_storage,id',
+            'to_storage' => 'sometimes|required|integer|exists:store_other_storage,id',
+            'reason' => 'sometimes|nullable|string|max:255',
+            'publisher' => 'sometimes|required|integer',
+            'publisher_name' => 'sometimes|nullable|string|max:255',
+            'from_storage_n' => 'sometimes|nullable|string|max:255',
+            'to_storage_n' => 'sometimes|nullable|string|max:255',
         ]);
 
         $tahwelat->update($validated);

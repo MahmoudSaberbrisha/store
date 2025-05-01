@@ -26,7 +26,7 @@ class StorePurchasesOthers extends Model
         'had_back',
         'had_back_date',
         'had_back_amount',
-        'old'
+        'old',
     ];
 
     protected $casts = [

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Stocks\Purchase;
 use App\Http\Controllers\Stocks\StocksBaseController;
 use Illuminate\Http\Request;
 use App\Models\Stocks\Purchase\StoreHadbackPurchase;
+use App\Models\Stocks\Other\StoreOtherSupplier;
+use App\Models\User;
 
 class StoreHadbackPurchaseController extends StocksBaseController
 {
@@ -21,7 +23,13 @@ class StoreHadbackPurchaseController extends StocksBaseController
 
     public function create()
     {
-        return view('storehadbackpurchase.create');
+        $branches = \App\Models\Stocks\Setting\StoreBranchSetting::all();
+
+        $suppliers = StoreOtherSupplier::all();
+        $users = User::all();
+        $invoices = \App\Models\Stocks\Other\StoreStartOtherFatora::select('pill_num', 'all_amount')->get();
+
+        return view('storehadbackpurchase.create', compact('branches', 'suppliers', 'users', 'invoices'));
     }
 
     /**
@@ -30,11 +38,18 @@ class StoreHadbackPurchaseController extends StocksBaseController
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreHadbackPurchase model fields
-            // Placeholder example:
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch_id_fk' => 'required|integer',
+            'sub_branch_id_fk' => 'required|integer',
+            'supplier_code' => 'required|integer',
+            'fatora_code' => 'required|integer',
+            'product_code' => 'required|integer',
+            'amount_buy' => 'required|numeric',
+            'all_cost_buy' => 'required|numeric',
+            'one_price_sell' => 'required|numeric',
+            'hadback_amount' => 'required|integer',
+            'date' => 'required|date',
+            'date_s' => 'required|date',
+            'publisher' => 'required|integer',
         ]);
 
         $hadback = StoreHadbackPurchase::create($validated);
@@ -61,10 +76,18 @@ class StoreHadbackPurchaseController extends StocksBaseController
         $hadback = StoreHadbackPurchase::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreHadbackPurchase model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch_id_fk' => 'sometimes|required|integer',
+            'sub_branch_id_fk' => 'sometimes|required|integer',
+            'supplier_code' => 'sometimes|required|integer',
+            'fatora_code' => 'sometimes|required|integer',
+            'product_code' => 'sometimes|required|integer',
+            'amount_buy' => 'sometimes|required|numeric',
+            'all_cost_buy' => 'sometimes|required|numeric',
+            'one_price_sell' => 'sometimes|required|numeric',
+            'hadback_amount' => 'sometimes|required|integer',
+            'date' => 'sometimes|required|integer',
+            'date_s' => 'sometimes|required|integer',
+            'publisher' => 'sometimes|required|integer',
         ]);
 
         $hadback->update($validated);

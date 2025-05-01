@@ -1,6 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Stocks\Rasid\StoreMasrofAsnafFar3Controller;
+
+Route::prefix('storemasrofasnaffar3')->group(function () {
+    Route::get('available-quantity/{sanf_code}', [StoreMasrofAsnafFar3Controller::class, 'getAvailableQuantity']);
+});
+
 
 Route::get('/stocks-master', function () {
     return view('stocks_master');
@@ -23,7 +29,6 @@ use App\Http\Controllers\Stocks\Purchase\StorePurchasesOtherFatoraController;
 use App\Http\Controllers\Stocks\Purchase\StorePurchasesOthersController;
 use App\Http\Controllers\Stocks\Purchase\StoreReturnPurchaseController;
 use App\Http\Controllers\Stocks\Purchase\StoreReturnPurchasesItemController;
-use App\Http\Controllers\Stocks\Rasid\StoreMasrofAsnafFar3Controller;
 use App\Http\Controllers\Stocks\Rasid\StoreRasidAyniController;
 use App\Http\Controllers\Stocks\Rasid\StoreRasidAyniBarController;
 use App\Http\Controllers\Stocks\Setting\StoreBranchSettingController;
@@ -45,7 +50,10 @@ Route::resource('storekhazina', StoreKhazinaController::class);
 
 // Other routes
 Route::resource('storeotherstorage', StoreOtherStorageController::class);
+
 Route::resource('storeothersupplier', StoreOtherSupplierController::class);
+
+Route::get('storeothersupplier/next-code', [StoreOtherSupplierController::class, 'getNextCode'])->name('storeothersupplier.nextCode');
 Route::resource('storestartotherfatora', StoreStartOtherFatoraController::class);
 Route::resource('storesuppliervouchersother', StoreSupplierVouchersOtherController::class);
 
@@ -56,6 +64,8 @@ Route::resource('storepurchasesfatora', StorePurchasesFatoraController::class);
 Route::resource('storepurchasesotherfatora', StorePurchasesOtherFatoraController::class);
 Route::resource('storepurchasesothers', StorePurchasesOthersController::class);
 Route::resource('storereturnpurchase', StoreReturnPurchaseController::class);
+
+Route::get('storereturnpurchase/paid-value/{code}', [StoreReturnPurchaseController::class, 'getPaidValue'])->name('storereturnpurchase.paidValue');
 Route::resource('storereturnpurchasesitem', StoreReturnPurchasesItemController::class);
 
 // Rasid routes

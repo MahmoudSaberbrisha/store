@@ -18,9 +18,18 @@ class StoreStartOtherFatoraController extends StocksBaseController
         $fatoras = StoreStartOtherFatora::all();
         return view('storestartotherfatora.index', compact('fatoras'));
     }
+
     public function create()
     {
-        return view('storestartotherfatora.create');
+        $branches = \App\Models\Stocks\Setting\StoreBranchSetting::all();
+
+        // Generate unique 8-digit pill_num
+        do {
+            $pill_num = str_pad(random_int(0, 99999999), 8, '0', STR_PAD_LEFT);
+            $exists = StoreStartOtherFatora::where('pill_num', $pill_num)->exists();
+        } while ($exists);
+
+        return view('storestartotherfatora.create', compact('branches', 'pill_num'));
     }
 
     /**
@@ -28,17 +37,24 @@ class StoreStartOtherFatoraController extends StocksBaseController
      */
     public function store(Request $request)
     {
+        // Generate unique 8-digit pill_num
+        do {
+            $pill_num = str_pad(random_int(0, 99999999), 8, '0', STR_PAD_LEFT);
+            $exists = StoreStartOtherFatora::where('pill_num', $pill_num)->exists();
+        } while ($exists);
+
+        $request->merge(['pill_num' => $pill_num]);
+
         $validated = $request->validate([
-            // Add validation rules based on StoreStartOtherFatora model fields
-            // Placeholder example:
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch' => 'required|integer',
+            'sub_branch' => 'required|integer',
+            'pill_num' => 'required|string|max:15',
+            'all_amount' => 'required|string|max:15',
+            'all_cost' => 'required|numeric',
         ]);
 
         $fatora = StoreStartOtherFatora::create($validated);
         $fatora->save();
-
 
         return redirect()->route($this->routeName . '.index')->with('success', 'Other start fatora created successfully.');
     }
@@ -60,10 +76,11 @@ class StoreStartOtherFatoraController extends StocksBaseController
         $fatora = StoreStartOtherFatora::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreStartOtherFatora model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'main_branch' => 'sometimes|required|integer',
+            'sub_branch' => 'sometimes|required|integer',
+            'pill_num' => 'sometimes|required|string|max:15',
+            'all_amount' => 'sometimes|required|string|max:15',
+            'all_cost' => 'sometimes|required|numeric',
         ]);
 
         $fatora->update($validated);

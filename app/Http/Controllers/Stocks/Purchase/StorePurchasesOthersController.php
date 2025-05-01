@@ -21,7 +21,22 @@ class StorePurchasesOthersController extends StocksBaseController
 
     public function create()
     {
-        return view('storepurchasesothers.create');
+        // Fetch publishers for dropdown
+        $publishers = \App\Models\User::all();
+        $branches = \App\Models\Stocks\Setting\StoreBranchSetting::all();
+
+        // Fetch suppliers and boxes for dropdowns
+        $suppliers = \App\Models\Stocks\Other\StoreOtherSupplier::all();
+        $boxes = \App\Models\Stocks\Khazina\StoreKhazina::all();
+
+        // Fetch products for product name dropdown
+        $products = \App\Models\Stocks\Items\StoreItem::all();
+
+        // Generate next unique fatora_code
+        $maxFatoraCode = \App\Models\Stocks\Purchase\StorePurchasesOthers::max('fatora_code');
+        $nextFatoraCode = $maxFatoraCode ? $maxFatoraCode + 1 : 1;
+
+        return view('storepurchasesothers.create', compact('publishers', 'suppliers', 'boxes', 'branches', 'products', 'nextFatoraCode'));
     }
 
     /**
@@ -30,11 +45,23 @@ class StorePurchasesOthersController extends StocksBaseController
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StorePurchasesOthers model fields
-            // Placeholder example:
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'fatora_code' => 'required|integer',
+            'main_branch_id_fk' => 'required|integer',
+            'sub_branch_id_fk' => 'required|integer',
+            'product_code' => 'required|string',
+            'product_name' => 'required|string|max:255',
+            'amount_buy' => 'required|numeric',
+            'all_cost_buy' => 'required|numeric',
+            'one_price_sell' => 'required|numeric',
+            'one_price_buy' => 'required|numeric',
+            'rasid_motah' => 'required|numeric',
+            'date_s' => 'required|date',
+            'date_ar' => 'nullable|date',
+            'publisher' => 'required|integer',
+            'had_back' => 'required|integer',
+            'had_back_date' => 'nullable|date',
+            'had_back_amount' => 'required|numeric',
+            'old' => 'nullable|boolean',
         ]);
 
         $purchase = StorePurchasesOthers::create($validated);
@@ -60,10 +87,23 @@ class StorePurchasesOthersController extends StocksBaseController
         $purchase = StorePurchasesOthers::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StorePurchasesOthers model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'fatora_code' => 'sometimes|required|integer',
+            'main_branch_id_fk' => 'sometimes|required|integer',
+            'sub_branch_id_fk' => 'sometimes|required|integer',
+            'product_code' => 'sometimes|required|string',
+            'product_name' => 'sometimes|required|string|max:255',
+            'amount_buy' => 'sometimes|required|numeric',
+            'all_cost_buy' => 'sometimes|required|numeric',
+            'one_price_sell' => 'sometimes|required|numeric',
+            'one_price_buy' => 'sometimes|required|numeric',
+            'rasid_motah' => 'sometimes|required|numeric',
+            'date_s' => 'sometimes|required|date',
+            'date_ar' => 'sometimes|nullable|date',
+            'publisher' => 'sometimes|required|integer',
+            'had_back' => 'sometimes|required|integer',
+            'had_back_date' => 'sometimes|nullable|date',
+            'had_back_amount' => 'sometimes|required|numeric',
+            'old' => 'sometimes|nullable|boolean',
         ]);
 
         $purchase->update($validated);

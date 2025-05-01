@@ -1,10 +1,10 @@
 <?php
 
-namespace app\Models\Stocks\Purchase;
+namespace App\Models\Stocks\Purchase;
 
 use Illuminate\Database\Eloquent\Model;
-use app\Models\Stocks\Setting\StoreBranchSetting;
-use app\Models\Stocks\Other\StoreOtherSupplier;
+use App\Models\Stocks\Setting\StoreBranchSetting;
+use App\Models\Stocks\Other\StoreOtherSupplier;
 use App\Models\User;
 
 class StoreHadbackPurchase extends Model

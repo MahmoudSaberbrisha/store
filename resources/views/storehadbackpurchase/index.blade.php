@@ -2,42 +2,50 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Store Hadback Purchases</h1>
-        <a href="{{ route('storehadbackpurchase.create') }}" class="btn btn-primary">Add New Hadback Purchase</a>
+        <h1>مشتريات المرتجعات للمخزن</h1>
+        <a href="{{ route('storehadbackpurchase.create') }}" class="btn btn-primary">إضافة مرتجع جديد</a>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Purchase Number</th>
-                <th>Date</th>
-                <th>Supplier</th>
-                <th>Total Amount</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($hadbacks as $hadback)
-                <tr>
-                    <td>{{ $hadback->id }}</td>
-                    <td><a href="{{ route('storehadbackpurchase.show', $hadback->id) }}">{{ $hadback->purchase_number }}</a>
-                    </td>
-                    <td>{{ $hadback->date }}</td>
-                    <td>{{ $hadback->supplier_name }}</td>
-                    <td>{{ $hadback->total_amount }}</td>
-                    <td>
+    <div class="row">
+        @foreach ($hadbacks as $hadback)
+            <div class="col-md-6 col-lg-4 mb-3">
+                <div class="card h-100 shadow-sm p-2">
+                    <div class="card-header bg-primary text-white py-1 px-2">
+                        <strong>فاتورة: {{ $hadback->fatora_code }}</strong>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="row g-2">
+                            <div class="col-6"><strong>المعرف:</strong> {{ $hadback->id }}</div>
+                            <div class="col-6"><strong>الفرع الرئيسي:</strong>
+                                {{ $hadback->mainBranch ? $hadback->mainBranch->title ?? '' : '' }}</div>
+                            <div class="col-6"><strong>الفرع الفرعي:</strong>
+                                {{ $hadback->subBranch ? $hadback->subBranch->title ?? '' : '' }}</div>
+                            <div class="col-6"><strong>المورد:</strong>
+                                {{ $hadback->supplier ? $hadback->supplier->name ?? '' : '' }}</div>
+                            <div class="col-6"><strong>كود المنتج:</strong> {{ $hadback->product_code }}</div>
+                            <div class="col-6"><strong>كمية الشراء:</strong> {{ $hadback->amount_buy }}</div>
+                            <div class="col-6"><strong>إجمالي تكلفة الشراء:</strong> {{ $hadback->all_cost_buy }}</div>
+                            <div class="col-6"><strong>سعر البيع للوحدة:</strong> {{ $hadback->one_price_sell }}</div>
+                            <div class="col-6"><strong>كمية المرتجع:</strong> {{ $hadback->hadback_amount }}</div>
+                            <div class="col-6"><strong>التاريخ:</strong> {{ date('Y-m-d', $hadback->date) }}</div>
+                            <div class="col-6"><strong>الناشر:</strong>
+                                {{ $hadback->publisherUser ? $hadback->publisherUser->name ?? '' : '' }}</div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between py-1 px-2">
+                        <a href="{{ route('storehadbackpurchase.show', $hadback->id) }}"
+                            class="btn btn-sm btn-info">عرض</a>
                         <a href="{{ route('storehadbackpurchase.edit', $hadback->id) }}"
-                            class="btn btn-sm btn-warning">Edit</a>
+                            class="btn btn-sm btn-warning">تعديل</a>
                         <form action="{{ route('storehadbackpurchase.destroy', $hadback->id) }}" method="POST"
-                            class="d-inline" onsubmit="return confirm('Are you sure?');">
+                            class="d-inline" onsubmit="return confirm('هل أنت متأكد؟');">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                            <button class="btn btn-sm btn-danger" type="submit">حذف</button>
                         </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 @endsection

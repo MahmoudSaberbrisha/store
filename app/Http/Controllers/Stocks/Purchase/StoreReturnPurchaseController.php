@@ -21,7 +21,21 @@ class StoreReturnPurchaseController extends StocksBaseController
 
     public function create()
     {
-        return view('storereturnpurchase.create');
+        // Fetch publishers for dropdown
+        $publishers = \App\Models\User::all();
+        $branches = \App\Models\Stocks\Setting\StoreBranchSetting::all();
+
+        // Fetch suppliers and boxes for dropdowns
+        $suppliers = \App\Models\Stocks\Other\StoreOtherSupplier::all();
+        $boxes = \App\Models\Stocks\Khazina\StoreKhazina::all();
+
+        // Fetch products for product name dropdown
+        $products = \App\Models\Stocks\Items\StoreItem::all();
+
+        // Fetch distinct purchase invoice codes from StorePurchasesOthers
+        $purchaseInvoiceCodes = \App\Models\Stocks\Purchase\StorePurchasesOthers::select('fatora_code')->distinct()->orderBy('fatora_code', 'desc')->get();
+
+        return view('storereturnpurchase.create', compact('publishers', 'suppliers', 'boxes', 'branches', 'products', 'purchaseInvoiceCodes'));
     }
 
     /**
@@ -30,11 +44,13 @@ class StoreReturnPurchaseController extends StocksBaseController
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreReturnPurchase model fields
-            // Placeholder example:
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'fatora_code_purchases' => 'required|integer',
+            'total_price' => 'required|numeric',
+            'date' => 'required|date',
+            'date_ar' => 'nullable|string',
+            'publisher' => 'required|integer',
+            'publisher_name' => 'nullable|string|max:255',
+            'supplier_code' => 'required|integer',
         ]);
 
         $return = StoreReturnPurchase::create($validated);
@@ -61,10 +77,13 @@ class StoreReturnPurchaseController extends StocksBaseController
         $return = StoreReturnPurchase::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreReturnPurchase model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'fatora_code_purchases' => 'sometimes|required|integer',
+            'total_price' => 'sometimes|required|numeric',
+            'date' => 'sometimes|required|date',
+            'date_ar' => 'sometimes|nullable|string',
+            'publisher' => 'sometimes|required|integer',
+            'publisher_name' => 'sometimes|nullable|string|max:255',
+            'supplier_code' => 'sometimes|required|integer',
         ]);
 
         $return->update($validated);
@@ -83,6 +102,27 @@ class StoreReturnPurchaseController extends StocksBaseController
 
         return redirect()->route($this->routeName . '.index')->with('success', 'Return purchase deleted successfully.');
     }
+
+    /**
+     * API endpoint to get the paid value for a given purchase invoice code.
+     */
+    public function getPaidValue($code)
+    {
+        // Trim and cast code to string to avoid mismatch
+        $code = trim($code);
+
+        $purchase = \App\Models\Stocks\Purchase\StorePurchasesOtherFatora::where('fatora_code', $code)->first();
+
+        if ($purchase) {
+            return response()->json([
+                'paid' => $purchase->paid ?? 0,
+                'publisher_name' => $purchase->publisher ?? ''
+            ]);
+        } else {
+            return response()->json(['paid' => 0, 'publisher_name' => '']);
+        }
+    }
+
 
     // Add any relevant calculations or business logic methods here
 }

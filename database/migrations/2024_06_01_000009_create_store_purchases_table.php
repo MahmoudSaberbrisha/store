@@ -32,8 +32,8 @@ class CreateStorePurchasesTable extends Migration
             $table->float('amount_buy');
             $table->decimal('all_cost_buy', 19, 2);
             $table->decimal('one_price_sell', 19, 2);
-            $table->integer('date');
-            $table->integer('date_s');
+            $table->date('date');
+            $table->date('date_s');
             $table->integer('publisher');
             $table->string('sarf_far3_pill_num', 15);
             $table->boolean('old')->default(false);

@@ -30,11 +30,18 @@ class StoreReturnPurchasesItemController extends StocksBaseController
     public function store(Request $request)
     {
         $validated = $request->validate([
-            // Add validation rules based on StoreReturnPurchasesItem model fields
-            // Placeholder example:
-            'field1' => 'required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'return_purchases_id' => 'required|integer',
+            'item_code' => 'required|integer',
+            'item_name' => 'required|string|max:255',
+            'one_price_buy' => 'required|numeric',
+            'return_amount' => 'required|numeric',
+            'price_return_amount' => 'required|numeric',
+            'date' => 'required|date',
+            'date_ar' => 'nullable|string',
+            'publisher' => 'required|integer',
+            'publisher_name' => 'nullable|string|max:255',
+            'sub_branch_id_fk' => 'required|integer',
+            'supplier_code' => 'required|integer',
         ]);
 
         $item = StoreReturnPurchasesItem::create($validated);
@@ -67,10 +74,18 @@ class StoreReturnPurchasesItemController extends StocksBaseController
         $item = StoreReturnPurchasesItem::findOrFail($id);
 
         $validated = $request->validate([
-            // Add validation rules based on StoreReturnPurchasesItem model fields
-            'field1' => 'sometimes|required|string',
-            'field2' => 'nullable|integer',
-            // Add other fields as per model
+            'return_purchases_id' => 'sometimes|required|integer',
+            'item_code' => 'sometimes|required|integer',
+            'item_name' => 'sometimes|required|string|max:255',
+            'one_price_buy' => 'sometimes|required|numeric',
+            'return_amount' => 'sometimes|required|numeric',
+            'price_return_amount' => 'sometimes|required|numeric',
+            'date' => 'sometimes|required|date',
+            'date_ar' => 'sometimes|nullable|string',
+            'publisher' => 'sometimes|required|integer',
+            'publisher_name' => 'sometimes|nullable|string|max:255',
+            'sub_branch_id_fk' => 'sometimes|required|integer',
+            'supplier_code' => 'sometimes|required|integer',
         ]);
 
         $item->update($validated);
